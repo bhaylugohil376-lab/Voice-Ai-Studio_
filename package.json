@@ -1,0 +1,28 @@
+{
+  "name": "voice-ai-studio",
+  "version": "1.0.0",
+  "description": "Voice AI Studio & SaaS platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node scripts/check.js",
+    "test": "npm run check && npm run check:integrations",
+    "check:api": "node scripts/check.js",
+    "build": "npm run check",
+    "check:config": "node scripts/check.js",
+    "check:integrations": "node scripts/check-integrations.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.4.0",
+    "express": "^4.19.2",
+    "formidable": "^3.5.2",
+    "openai": "^5.20.0",
+    "stripe": "^14.14.0"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  }
+}
