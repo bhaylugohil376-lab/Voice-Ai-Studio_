@@ -22,7 +22,5 @@
     "stripe": "^14.14.0"
   },
   "type": "module",
-  "engines": {
-    "node": ">=20"
-  }
+  "engines": {"node": ">=20"}
 }
