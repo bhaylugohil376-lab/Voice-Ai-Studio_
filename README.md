@@ -12,3 +12,6 @@ Set private API credentials only in the backend host's environment or Supabase E
 
 ## Important
 A successful source upload does not prove the live site works. Voice listing and TTS generation require valid server-side provider credentials and a deployed backend. The full 91-file archive has not yet been fully expanded into this repository.
+
+## Verification limits
+A passing syntax check does not prove provider credentials are valid. Successful source upload and automated checks do not prove provider credentials are valid, and live provider actions still require working secrets, account access, and a deployed backend.
