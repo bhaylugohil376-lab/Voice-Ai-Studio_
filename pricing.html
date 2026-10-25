@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050b18">
+  <title>Pricing — Voice AI Studio</title>
+  <meta name="description" content="Voice AI Studio plans and pricing.">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .pricing-page{min-height:100vh;color:#eaf4ff;background:radial-gradient(circle at 50% 0%,rgba(34,211,238,.10),transparent 32%),#06101f}
+    .pricing-container{width:min(1100px,calc(100% - 32px));margin:auto;padding:56px 0 84px}
+    .pricing-heading{text-align:center;max-width:700px;margin:0 auto 36px}
+    .pricing-heading h1{font-size:clamp(34px,6vw,56px);letter-spacing:-.04em;margin:0}
+    .pricing-heading h1 span{color:#22d3ee}
+    .pricing-heading p{color:#8fa7c2;line-height:1.7}
+    .pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,430px));justify-content:center;gap:20px}
+    .pricing-card{padding:28px;border:1px solid rgba(148,163,184,.16);border-radius:20px;background:linear-gradient(180deg,#0d1d34,#071222);box-shadow:0 24px 65px #0004}
+    .pricing-card.premium{border-color:#22d3ee66}
+    .plan-title{font-size:22px;font-weight:800}.plan-description{color:#8198b2;line-height:1.6;min-height:40px}
+    .price{display:flex;align-items:baseline;gap:8px;margin:22px 0}.price-amount{font-size:44px;font-weight:850}.price-period{color:#8198b2}
+    .plan-button{display:flex;justify-content:center;align-items:center;gap:8px;width:100%;min-height:46px;border-radius:10px;border:1px solid #ffffff22;background:#071222;color:#dcecff;font-weight:800;text-decoration:none;cursor:pointer}
+    .plan-button.primary{background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:#02111f;border:0}
+    .feature-title{margin:25px 0 12px;color:#8fa7c2;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em}
+    .feature-list{display:grid;gap:12px;list-style:none;padding:0}.feature-list li{color:#c8d8e9;font-size:13px;line-height:1.5}.feature-list i{color:#22d3ee;width:16px;height:16px;vertical-align:middle;margin-right:7px}
+    .pricing-note{max-width:800px;margin:24px auto;padding:14px;border:1px solid #ffffff15;border-radius:12px;color:#8ba0b8;text-align:center;font-size:12px;line-height:1.6}
+    .checkout-status{display:none;margin:20px auto;max-width:650px;padding:12px;border-radius:10px;color:#fecaca;background:#ef444414;border:1px solid #ef444433}.checkout-status.show{display:block}
+    @media(max-width:700px){.pricing-grid{grid-template-columns:1fr;max-width:480px;margin:auto}.pricing-card{padding:22px}}
+  </style>
+</head>
+<body>
+<div class="pricing-page">
+<header class="navbar">
+  <a href="./index.html" class="logo"><span class="logo-mark"><i data-lucide="audio-lines"></i></span><span>Voice AI Studio</span></a>
+  <nav class="nav-links"><a href="./index.html">Home</a><a href="./tools.html">AI Tools</a><a href="./voices.html">Voices</a><a href="./studio.html">Studio</a><a class="active" href="./pricing.html">Pricing</a></nav>
+  <div class="nav-actions"><a href="./login.html" class="nav-login">Login</a><a href="./signup.html" class="primary-btn">Get Started <i data-lucide="arrow-right"></i></a></div>
+</header>
+<main class="pricing-container">
+  <section class="pricing-heading"><div class="pricing-eyebrow">SIMPLE PLANS</div><h1>Plans for every <span>creator.</span></h1><p>Start free and upgrade when your voice production workflow needs more capacity.</p></section>
+  <section class="pricing-grid" aria-label="Pricing plans">
+    <article class="pricing-card"><div class="plan-title">Free</div><p class="plan-description">Explore Voice AI Studio and try the available tools.</p><div class="price"><span class="price-amount">$0</span><span class="price-period">/ month</span></div><a href="./signup.html" class="plan-button"><i data-lucide="user-plus"></i> Start Free</a><div class="feature-title">Included</div><ul class="feature-list"><li><i data-lucide="check"></i>5 AI uses per tool every 24 hours</li><li><i data-lucide="check"></i>Browse the voice library</li><li><i data-lucide="check"></i>Available voice and studio tools</li><li><i data-lucide="check"></i>Account and project features when configured</li></ul></article>
+    <article class="pricing-card premium"><div class="plan-title">Premium</div><p class="plan-description">For creators and teams producing more voice content.</p><div class="price"><span id="premiumPrice" class="price-amount">$20</span><span id="premiumPeriod" class="price-period">/ month</span></div><button id="premiumBtn" class="plan-button primary" type="button"><i data-lucide="credit-card"></i> Get Premium</button><div class="feature-title">Everything in Free, plus</div><ul class="feature-list"><li><i data-lucide="check"></i>Higher internal usage allowance*</li><li><i data-lucide="check"></i>Advanced voice workflows when configured</li><li><i data-lucide="check"></i>Studio editing features</li><li><i data-lucide="check"></i>Configured audio and AI tools</li></ul></article>
+  </section>
+  <div id="checkoutStatus" class="checkout-status" role="status" aria-live="polite"></div>
+  <p class="pricing-note">* Provider API quotas, infrastructure limits and fair-use restrictions may still apply. Premium checkout requires Supabase authentication and Stripe configuration.</p>
+</main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./supabase-config.js"></script><script src="./script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{if(window.lucide)window.lucide.createIcons();const btn=document.getElementById("premiumBtn");btn.addEventListener("click",async()=>{const status=document.getElementById("checkoutStatus");const show=(m)=>{status.textContent=m;status.classList.add("show")};const client=window.supabaseClient;if(!client?.auth){show("Supabase is not initialized. Check supabase-config.js.");return}btn.disabled=true;try{const {data,error}=await client.auth.getSession();if(error)throw error;if(!data.session?.access_token){location.href="./login.html?redirect=pricing.html";return}const res=await fetch("/api/stripe-checkout",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+data.session.access_token},body:JSON.stringify({interval:"monthly"})});const out=await res.json().catch(()=>({}));if(!res.ok)throw new Error(out.error||"Checkout failed (HTTP "+res.status+")");const url=new URL(out.url);if(url.protocol!=="https:"||url.hostname!=="checkout.stripe.com")throw new Error("Unexpected checkout URL returned by server.");location.assign(url.href)}catch(e){show(e.message||"Unable to start checkout.");btn.disabled=false}})});
+</script>
+</body></html>
