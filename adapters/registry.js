@@ -7,7 +7,7 @@
   const definitions = [
     ["tts","Text to Speech","/api/tts","POST","elevenlabs"],
     ["voice-library","Voice Library","/api/voices","GET","elevenlabs"],
-    ["voice-cloning","Voice Cloning","/api/clone","POST","elevenlabs"],
+    ["voice-cloning","Voice Cloning","/api/voice-clone","POST","elevenlabs"],
     ["voice-design","Voice Design","/api/voice-design","POST","elevenlabs"],
     ["voice-changer","Voice Changer","/api/voice-changer","POST","elevenlabs"],
     ["voice-isolator","Voice Isolator","/api/voice-isolator","POST","elevenlabs"],
@@ -28,7 +28,7 @@
     ["usage-limits","Usage Limits","/api/usage","GET","supabase"],
     ["subscription-billing","Subscription & Billing","/api/stripe-checkout","POST","stripe"],
     ["contact","Contact","/api/contact","POST","supabase"],
-    ["login-signup","Login & Signup","/api/auth","POST","supabase-auth"]
+    ["login-signup","Login & Signup","supabase-auth","POST","supabase-auth"]
   ];
   const adapters = Object.freeze(definitions.map(([id, name, endpoint, method, provider]) =>
     Object.freeze({ id, name, endpoint, method, provider })
@@ -38,6 +38,26 @@
     const adapter = adapters.find((item) => item.id === id);
     if (!adapter) throw new Error("Unknown VoiceAI adapter: " + id);
     const opts = options && typeof options === "object" ? options : {};
+    if (id === "login-signup") {
+      const auth = root.supabaseClient && root.supabaseClient.auth;
+      if (!auth) throw new Error("Supabase authentication is not initialized on this page.");
+      const email = typeof opts.email === "string" ? opts.email.trim() : "";
+      const password = typeof opts.password === "string" ? opts.password : "";
+      if (!email || !password) throw new Error("Email and password are required.");
+      if (opts.action === "signup") {
+        const result = await auth.signUp({ email, password });
+        if (result.error) throw result.error;
+        return result.data;
+      }
+      if (opts.action === "signout") {
+        const result = await auth.signOut();
+        if (result.error) throw result.error;
+        return { signedOut: true };
+      }
+      const result = await auth.signInWithPassword({ email, password });
+      if (result.error) throw result.error;
+      return result.data;
+    }
     const session = root.supabaseClient && root.supabaseClient.auth
       ? await root.supabaseClient.auth.getSession()
       : null;
