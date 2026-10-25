@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Voice AI Studio — Text to Speech</title>
+<link rel="stylesheet" href="./style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./supabase-config.js"></script><script src="./api-config.js"></script>
+<style>
+.tts-wrap{max-width:900px;margin:32px auto;padding:20px}.tts-card{padding:22px;border:1px solid #334155;border-radius:16px;margin:18px 0}
+.tts-card label{display:block;margin:14px 0 6px;font-weight:600}.tts-card textarea,.tts-card select,.tts-card input{box-sizing:border-box;width:100%;padding:12px;border-radius:9px}
+.tts-card textarea{min-height:150px}.tts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.tts-btn{padding:12px 18px;margin:12px 8px 0 0;border-radius:9px;cursor:pointer}
+#ttsStatus{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:14px}#ttsAudio{width:100%;margin-top:16px}
+@media(max-width:600px){.tts-row{grid-template-columns:1fr}.tts-wrap{padding:12px}}
+</style></head>
+<body><main class="tts-wrap">
+<h1>Text to Speech</h1><p>Select an available voice and generate speech. Provider access and credits are required.</p>
+<section class="tts-card">
+<label for="ttsText">Text</label><textarea id="ttsText" maxlength="5000" placeholder="Type text to speak..."></textarea>
+<p><small><span id="ttsChars">0</span>/5000 characters</small></p>
+<div class="tts-row"><div><label for="ttsSearch">Search voices</label><input id="ttsSearch" type="search" placeholder="Search by name"></div>
+<div><label for="ttsVoice">Voice</label><select id="ttsVoice"><option value="">Loading voices…</option></select></div></div>
+<label for="ttsModel">Model</label><select id="ttsModel"><option value="eleven_multilingual_v2">Multilingual v2</option><option value="eleven_flash_v2_5">Flash v2.5</option><option value="eleven_turbo_v2_5">Turbo v2.5</option></select>
+<button class="tts-btn" id="ttsRefresh" type="button">Refresh Voices</button><button class="tts-btn" id="ttsGenerate" type="button">Generate Speech</button>
+<p id="ttsCount">0 voices loaded</p><div id="ttsStatus" role="status" aria-live="polite"></div>
+</section><section class="tts-card" id="ttsResult" hidden><h2>Generated audio</h2><audio id="ttsAudio" controls></audio><p><a id="ttsDownload" download="voiceai-speech.mp3">Download audio</a></p></section>
+</main>
+<script>
+(()=>{"use strict";
+const $=id=>document.getElementById(id), voices=new Map();let audioUrl=null,loading=false,generating=false;
+const status=(s,kind="")=>{$("ttsStatus").textContent=s;$("ttsStatus").className=kind};
+async function token(){const c=window.supabaseClient;if(!c?.auth?.getSession)throw Error("Supabase client is not initialized.");const {data,error}=await c.auth.getSession();if(error)throw Error(error.message);if(!data.session?.access_token)throw Error("Please sign in before using Text to Speech.");return data.session.access_token}
+async function request(url,options={}){const t=await token();const r=await fetch(url,{...options,headers:{...(options.headers||{}),Authorization:"Bearer "+t}});if(!r.ok){let m="Request failed ("+r.status+")";try{const p=await r.json();m=p.error||p.message||m}catch{}throw Error(m)}return r}
+function render(){const q=$("ttsSearch").value.trim().toLowerCase(),select=$("ttsVoice"),prev=select.value;select.replaceChildren(new Option("Select a voice…",""));for(const v of voices.values()){if(q&&!String(v.name+" "+v.description+" "+JSON.stringify(v.labels||{})).toLowerCase().includes(q))continue;select.add(new Option(v.name+" — "+(v.category||"Voice"),v.voice_id))}if([...select.options].some(o=>o.value===prev))select.value=prev;$("ttsCount").textContent=select.options.length-1+" voices loaded"}
+async function load(){if(loading)return;loading=true;$("ttsRefresh").disabled=true;$("ttsVoice").replaceChildren(new Option("Loading voices…",""));status("Loading voices…");try{const p=await (await request("/api/voices")).json();if(!p.success||!Array.isArray(p.voices))throw Error(p.error||"Invalid voice response.");voices.clear();p.voices.forEach(v=>{if(v.voice_id&&v.name)voices.set(v.voice_id,v)});render();status(voices.size+" voices loaded.","success");if(!voices.size)status("No voices returned. Check the voice provider configuration.");}catch(e){$("ttsVoice").replaceChildren(new Option("Voices unavailable",""));$("ttsCount").textContent="0 voices loaded";status(e.message||"Could not load voices.","error")}finally{loading=false;$("ttsRefresh").disabled=false}}
+async function generate(){if(generating)return;const text=$("ttsText").value.trim(),voice_id=$("ttsVoice").value;if(!text)return status("Enter text first.","error");if(!voice_id)return status("Select a voice first.","error");generating=true;$("ttsGenerate").disabled=true;$("ttsResult").hidden=true;status("Generating speech…");try{const r=await request("/api/tts",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,voice_id,model_id:$("ttsModel").value,output_format:"mp3_44100_128"})});const blob=await r.blob();if(!blob.size)throw Error("Provider returned empty audio.");if(audioUrl)URL.revokeObjectURL(audioUrl);audioUrl=URL.createObjectURL(blob);$("ttsAudio").src=audioUrl;$("ttsDownload").href=audioUrl;$("ttsResult").hidden=false;status("Speech generated successfully.","success")}catch(e){status(e.message||"Speech generation failed.","error")}finally{generating=false;$("ttsGenerate").disabled=false}}
+$("ttsText").addEventListener("input",()=>{$("ttsChars").textContent=$("ttsText").value.length});$("ttsSearch").addEventListener("input",render);$("ttsRefresh").addEventListener("click",load);$("ttsGenerate").addEventListener("click",generate);window.addEventListener("beforeunload",()=>{if(audioUrl)URL.revokeObjectURL(audioUrl)});load();
+})();
+</script></body></html>
