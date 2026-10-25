@@ -89,7 +89,7 @@ export default async function handler(req, res) {
     } else if (contentType.includes("application/json") || contentType.includes("application/x-www-form-urlencoded")) {
       if (req.body === undefined || Buffer.isBuffer(req.body) || typeof req.body === "string") {
         let raw = req.body;
-        if (raw === undefined) raw = await readRawBody(req, 10 * 1024 * 1024);
+        if (raw === undefined) raw = await readRawBody(req, (route === "voice-changer" || route === "voice-isolator") ? 28 * 1024 * 1024 : 10 * 1024 * 1024);
         if (typeof raw === "string") raw = Buffer.from(raw);
         if (Buffer.isBuffer(raw)) {
           if (contentType.includes("application/json")) {
