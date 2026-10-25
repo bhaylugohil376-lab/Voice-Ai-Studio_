@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Voice AI Studio — create, explore, and manage AI voice projects.">
+  <title>Voice AI Studio</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="navbar">
+    <a class="logo" href="./index.html" aria-label="Voice AI Studio home">Voice AI Studio</a>
+    <nav aria-label="Main navigation">
+      <a href="./index.html">Home</a>
+      <a href="./tools.html">AI Tools</a>
+      <a href="./voices.html">Voices</a>
+      <a href="./studio.html">Studio</a>
+      <a href="./pricing.html">Pricing</a>
+      <a href="./login.html">Login</a>
+      <a href="./signup.html">Get Started</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">YOUR CREATIVE VOICE WORKSPACE</p>
+        <h1>Bring your words to life with <span>Voice AI Studio</span></h1>
+        <p>Create voiceovers, explore AI voice tools, and manage your audio projects from one workspace.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="./studio.html">Open Studio</a>
+          <a class="button button-secondary" href="./tools.html">Explore AI Tools</a>
+        </div>
+      </div>
+      <div class="hero-generator">
+        <h2>Start creating</h2>
+        <p>Choose a tool to begin your next voice project.</p>
+        <div class="tools-grid">
+          <a class="tool-card" href="./tts.html"><h3>Text to Speech</h3><p>Turn written text into spoken audio.</p></a>
+          <a class="tool-card" href="./stt.html"><h3>Speech to Text</h3><p>Convert speech into editable text.</p></a>
+          <a class="tool-card" href="./voices.html"><h3>Voice Library</h3><p>Explore available voices.</p></a>
+          <a class="tool-card" href="./sound-effects.html"><h3>Sound Effects</h3><p>Create audio for your content.</p></a>
+        </div>
+      </div>
+    </section>
+    <section class="section" aria-labelledby="features-heading">
+      <h2 id="features-heading">Everything for your voice workflow</h2>
+      <div class="tools-grid">
+        <a class="tool-card" href="./voiceover.html"><h3>Voiceover</h3><p>Build narration for videos and presentations.</p></a>
+        <a class="tool-card" href="./projects.html"><h3>Projects</h3><p>Return to your saved creative work.</p></a>
+        <a class="tool-card" href="./pricing.html"><h3>Plans & Pricing</h3><p>Review plans and usage options.</p></a>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <p>© <span id="year"></span> Voice AI Studio</p>
+    <nav aria-label="Footer navigation">
+      <a href="./privacy.html">Privacy</a>
+      <a href="./terms.html">Terms</a>
+      <a href="./pricing.html">Pricing</a>
+    </nav>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
