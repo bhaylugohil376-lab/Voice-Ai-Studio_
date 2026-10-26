@@ -17,7 +17,7 @@ export default async function handler(req, res) {
       if (["hi", "gu", "en"].includes(language)) params.set("language", language);
       const page = typeof req.query?.page === "string" ? req.query.page : "";
       const nextToken = typeof req.query?.next_page_token === "string" ? req.query.next_page_token : "";
-      if (/^\\d{1,5}$/.test(page)) params.set("page", page);
+      if (/^\d{1,5}$/.test(page)) params.set("page", page);
       if (nextToken) params.set("next_page_token", nextToken);
       const headers = { Accept: "application/json" };
       const ttsKey = process.env.TTS_AI_API_KEY;
