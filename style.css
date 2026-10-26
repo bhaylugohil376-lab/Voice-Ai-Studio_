@@ -109,3 +109,18 @@ input,textarea,select{accent-color:#2563eb}
 .info-article p:last-child{margin-bottom:0}
 .info-article a{color:#67e8f9;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:600px){.info-page-heading{padding:24px 0 16px}.info-article{padding:18px}}
+
+
+/* Homepage: full AI tools directory */
+.ai-tools-section{margin:34px 0 44px}
+.ai-tools-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.ai-tools-heading h2,.home-info-links h2{margin:0;font-size:clamp(1.35rem,3vw,1.8rem);letter-spacing:-.025em}
+.ai-tools-heading>span{color:var(--muted);font-size:.9rem;border:1px solid var(--border);padding:6px 10px;border-radius:999px}
+.ai-tools-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ai-tool-card{min-height:175px;padding:20px}
+.ai-tool-card h2{font-size:1.05rem}
+.home-info-links{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:22px 0 34px;border-top:1px solid var(--border)}
+.home-info-links h2{width:100%;font-size:1.15rem}
+.home-info-links a{color:#67e8f9;font-weight:700}
+@media(max-width:850px){.ai-tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.ai-tools-grid{grid-template-columns:1fr}.ai-tool-card{min-height:145px}.home-info-links{gap:14px}}
