@@ -1,7 +1,7 @@
 import { sendError, requireMethod, parseJsonBody } from "./_lib/response.js";
 
 const MAX_TEXT_LENGTH = 5000;
-const FREE_ANONYMOUS_TEXT_LIMIT = 500;
+const FREE_ANONYMOUS_TEXT_LIMIT = 5000;
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ["POST"])) return;
