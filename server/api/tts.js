@@ -3,6 +3,7 @@ import { checkAndUseAI } from "./_lib/usage.js";
 import { sendError, requireMethod, parseJsonBody } from "./_lib/response.js";
 
 const MAX_TEXT_LENGTH = 5000;
+const FREE_ANONYMOUS_TEXT_LIMIT = 500;
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ["POST"])) return;
@@ -19,6 +20,9 @@ export default async function handler(req, res) {
     const allowedOutputFormats = new Set(["mp3_44100_128", "mp3_22050_32", "pcm_16000", "pcm_22050", "pcm_24000", "pcm_44100"]);
     if (!text) return sendError(res, 400, "Text is required.");
     if (text.length > MAX_TEXT_LENGTH) return sendError(res, 400, `Text must be ${MAX_TEXT_LENGTH} characters or fewer.`);
+    if (body.provider === "ttsai" && !process.env.TTS_AI_API_KEY && text.length > FREE_ANONYMOUS_TEXT_LIMIT) {
+      return sendError(res, 400, `Free testing supports up to ${FREE_ANONYMOUS_TEXT_LIMIT} characters per request without an API key.`);
+    }
     if (!voiceId || !/^[a-zA-Z0-9_-]{1,100}$/.test(voiceId)) return sendError(res, 400, "A valid voice_id is required.");
 
     // Free TTS.ai provider: does not depend on ElevenLabs credentials or credits.
@@ -29,8 +33,7 @@ export default async function handler(req, res) {
       const language = languageMap[body.language] || (typeof body.language === "string" && /^[a-z]{2,3}$/.test(body.language) ? body.language : "");
       const ttsHeaders = { "Content-Type": "application/json", Accept: "application/json" };
       if (process.env.TTS_AI_API_KEY) ttsHeaders.Authorization = "Bearer " + process.env.TTS_AI_API_KEY;
-      const usage = await checkAndUseAI(user, "tts");
-      if (!usage.allowed) return sendError(res, usage.status || 503, usage.error || "Unable to verify AI usage.");
+      // Free testing bypasses the app subscription/credit counter. The provider applies its own anonymous free-tier limits.
       try {
         const submit = await fetch("https://api.tts.ai/v1/tts/", {
           method: "POST",
