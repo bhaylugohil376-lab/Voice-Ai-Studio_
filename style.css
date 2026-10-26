@@ -76,3 +76,22 @@ input,textarea,select{accent-color:#2563eb}
 .container input,.container select,.container textarea{background:#071225;color:var(--text);border:1px solid var(--border);border-radius:10px}
 .container button{border:1px solid var(--border);border-radius:10px;background:linear-gradient(110deg,#2563eb,#0891b2);color:#fff;padding:11px 15px;font-weight:700;cursor:pointer}
 @media(max-width:700px){.site-header{align-items:flex-start;flex-direction:column;padding:18px 16px}.site-header nav{width:100%;overflow-x:auto;flex-wrap:nowrap}.site-header nav a{flex:0 0 auto}.container{padding:20px 16px 42px}}
+
+
+/* Minimal information-only homepage */
+.home-info-only{max-width:1040px;min-height:calc(100vh - 180px);padding-top:48px;padding-bottom:56px}
+.home-info-hero{text-align:center;max-width:720px;margin:0 auto 32px}
+.home-info-hero h1{font-size:clamp(2.1rem,5vw,3.6rem);line-height:1.1;letter-spacing:-.045em;margin:12px 0}
+.home-info-hero p:last-child{color:var(--muted);max-width:620px;margin:0 auto}
+.home-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.home-info-card{display:flex;flex-direction:column;align-items:flex-start;min-height:190px;padding:24px;border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(145deg,rgba(15,30,56,.94),rgba(7,18,37,.94));transition:transform .18s,border-color .18s}
+.home-info-card:hover{transform:translateY(-3px);border-color:rgba(103,232,249,.55)}
+.home-info-icon{display:grid;place-items:center;width:38px;height:38px;margin-bottom:14px;border-radius:12px;background:rgba(37,99,235,.18);color:#67e8f9;font-weight:850}
+.home-info-card h2{font-size:1.2rem;margin:0 0 6px}
+.home-info-card p{color:var(--muted);margin:0 0 18px}
+.home-info-link{margin-top:auto;color:#67e8f9;font-weight:750;font-size:.92rem}
+.home-info-navbar{max-width:1200px}
+.home-info-footer{max-width:1200px;margin:0 auto;padding:22px 26px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;color:var(--muted)}
+.home-info-footer nav{display:flex;gap:16px;flex-wrap:wrap}
+.home-info-footer a:hover{color:var(--text)}
+@media(max-width:600px){.home-info-only{padding-top:28px}.home-info-grid{grid-template-columns:1fr}.home-info-card{min-height:160px;padding:20px}.home-info-footer{padding:20px 16px}.home-info-footer nav{gap:12px}}
