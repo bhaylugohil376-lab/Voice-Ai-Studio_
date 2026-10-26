@@ -47,7 +47,7 @@
       </div>
       <aside class="hero-generator" aria-labelledby="generator-title">
         <div class="generator-header"><div><span class="generator-label">VOICEAI STUDIO</span><h2 id="generator-title">AI Voice Generator</h2></div><span class="ready-status"><span></span> Ready</span></div>
-        <div class="generator-body"><label for="home-script">Enter your script</label><textarea id="home-script" placeholder="Create professional voice content with AI..."></textarea><div class="generator-row"><div class="generator-field"><label for="home-voice">Voice</label><select id="home-voice"><option value="">Select a voice</option></select></div></div><a class="button button-primary" href="tts.html" style="margin-top:16px;width:100%">Generate Voice <span aria-hidden="true">▶</span></a><p class="generator-note">Open Text to Speech to select a configured voice and generate audio.</p></div>
+        <div class="generator-body"><label for="home-script">Enter your script</label><textarea id="home-script" placeholder="Create professional voice content with AI..."></textarea><div class="generator-row"><div class="generator-field"><label for="home-voice">Voice</label><select id="home-voice" aria-describedby="home-voice-status"><option value="">Loading available voices…</option></select><p id="home-voice-status" class="generator-note" role="status" aria-live="polite">Loading available voices…</p></div></div><button class="button button-primary" id="home-generate" type="button" style="margin-top:16px;width:100%">Generate Voice <span aria-hidden="true">▶</span></button><p class="generator-note">Open Text to Speech to select a configured voice and generate audio.</p></div>
       </aside>
     </section>
     <section class="section container" id="ai-tools"><p class="eyebrow">AI CREATION SUITE</p><h2>Everything you need to create.</h2><p class="section-intro">Professional AI voice, audio, video and creative tools organized into dedicated workspaces.</p><div class="tools-grid" aria-label="All 24 AI tools">
@@ -87,6 +87,80 @@
   <footer class="footer"><span>© 2026 VoiceAI. All rights reserved.</span><nav aria-label="Information links"><a href="faq.html">FAQs</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav></footer>
 
 
-  <script>if(window.lucide){lucide.createIcons();}</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./supabase-config.js"></script>
+  <script src="./api-config.js"></script>
+  <script>
+  (() => {
+    "use strict";
+    const scriptInput = document.getElementById("home-script");
+    const voiceSelect = document.getElementById("home-voice");
+    const voiceStatus = document.getElementById("home-voice-status");
+    const generateButton = document.getElementById("home-generate");
+    const setVoiceStatus = (message) => { if (voiceStatus) voiceStatus.textContent = message; };
+
+    async function loadHomeVoices() {
+      if (!voiceSelect) return;
+      try {
+        const client = window.supabaseClient;
+        if (!client?.auth?.getSession) throw new Error("Voice service is not initialized. Open Text to Speech to check setup.");
+        const { data, error } = await client.auth.getSession();
+        if (error) throw error;
+        if (!data.session?.access_token) {
+          voiceSelect.replaceChildren(new Option("Sign in to load voices", ""));
+          setVoiceStatus("Sign in first, then open Text to Speech to load available voices.");
+          return;
+        }
+        voiceSelect.replaceChildren(new Option("Loading available voices…", ""));
+        const response = await fetch("/api/voices", { headers: { Authorization: "Bearer " + data.session.access_token } });
+        let payload;
+        try { payload = await response.json(); } catch (_) { payload = {}; }
+        if (!response.ok) throw new Error(payload.error || payload.message || "Voice service returned HTTP " + response.status + ".");
+        if (!payload.success || !Array.isArray(payload.voices)) throw new Error(payload.error || "The voice service returned an unexpected response.");
+        const available = payload.voices.filter(v => v && v.voice_id && v.name);
+        voiceSelect.replaceChildren(new Option("Select a voice", ""));
+        available.forEach(v => voiceSelect.add(new Option(v.name, v.voice_id)));
+        if (!available.length) {
+          voiceSelect.replaceChildren(new Option("No voices available", ""));
+          setVoiceStatus("No voices were returned. Check provider configuration.");
+        } else {
+          setVoiceStatus(available.length + " available voices loaded.");
+          try {
+            const saved = sessionStorage.getItem("voiceai_tts_voice");
+            if (saved && [...voiceSelect.options].some(option => option.value === saved)) voiceSelect.value = saved;
+          } catch (_) {}
+        }
+      } catch (error) {
+        voiceSelect.replaceChildren(new Option("Voices unavailable — open Text to Speech", ""));
+        setVoiceStatus((error && error.message) || "Could not load voices. Open Text to Speech for details.");
+      }
+    }
+
+    generateButton?.addEventListener("click", () => {
+      const text = scriptInput?.value.trim() || "";
+      if (!text) {
+        scriptInput?.setCustomValidity("Enter your script first.");
+        scriptInput?.reportValidity();
+        scriptInput?.focus();
+        return;
+      }
+      scriptInput?.setCustomValidity("");
+      try {
+        sessionStorage.setItem("voiceai_tts_text", text);
+        if (voiceSelect?.value) {
+          const voice = { voice_id: voiceSelect.value, name: voiceSelect.selectedOptions[0]?.textContent || "" };
+          sessionStorage.setItem("voiceai_selected_voice", JSON.stringify(voice));
+          sessionStorage.setItem("voiceai_tts_voice", voiceSelect.value);
+        }
+      } catch (_) {}
+      window.location.href = "tts.html";
+    });
+    scriptInput?.addEventListener("input", () => scriptInput.setCustomValidity(""));
+    loadHomeVoices();
+    if (window.lucide) window.lucide.createIcons();
+  })();
+  </script>
+</body>
+</html>
 </body>
 </html>
