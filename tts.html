@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head><script src="https://unpkg.com/lucide@latest"></script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Voice AI Studio — Text to Speech</title>
 <link rel="stylesheet" href="./style.css">
@@ -13,7 +13,13 @@
 #ttsStatus{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:14px}#ttsAudio{width:100%;margin-top:16px}
 @media(max-width:600px){.tts-row{grid-template-columns:1fr}.tts-wrap{padding:12px}}
 </style></head>
-<body><main class="tts-wrap">
+<body>
+<header class="navbar">
+<a href="index.html" class="logo"><span class="logo-mark"><i data-lucide="audio-lines"></i></span><span>VoiceAI</span></a>
+<nav class="nav-links"><a href="index.html">Home</a><a href="tools.html">AI Tools</a><a href="voices.html">Voices</a><a href="studio.html">Studio</a><a href="pricing.html">Pricing</a></nav>
+<div class="nav-actions"><a href="login.html" class="nav-login">Login</a><a href="signup.html" class="primary-btn">Get Started</a></div>
+</header>
+<main class="tts-wrap">
 <h1>Text to Speech</h1><p>Select an available voice and generate speech. Provider access and credits are required.</p>
 <section class="tts-card">
 <label for="ttsText">Text</label><textarea id="ttsText" maxlength="5000" placeholder="Type text to speak..."></textarea>
@@ -36,4 +42,4 @@ async function load(){if(loading)return;loading=true;$("ttsRefresh").disabled=tr
 async function generate(){if(generating)return;const text=$("ttsText").value.trim(),voice_id=$("ttsVoice").value;if(!text)return status("Enter text first.","error");if(!voice_id)return status("Select a voice first.","error");generating=true;$("ttsGenerate").disabled=true;$("ttsResult").hidden=true;status("Generating speech…");try{const r=await request("/api/tts",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,voice_id,model_id:$("ttsModel").value,output_format:"mp3_44100_128"})});const blob=await r.blob();if(!blob.size)throw Error("Provider returned empty audio.");if(audioUrl)URL.revokeObjectURL(audioUrl);audioUrl=URL.createObjectURL(blob);$("ttsAudio").src=audioUrl;$("ttsDownload").href=audioUrl;$("ttsResult").hidden=false;status("Speech generated successfully.","success")}catch(e){status(e.message||"Speech generation failed.","error")}finally{generating=false;$("ttsGenerate").disabled=false}}
 $("ttsText").addEventListener("input",()=>{$("ttsChars").textContent=$("ttsText").value.length});$("ttsSearch").addEventListener("input",render);$("ttsRefresh").addEventListener("click",load);$("ttsGenerate").addEventListener("click",generate);window.addEventListener("beforeunload",()=>{if(audioUrl)URL.revokeObjectURL(audioUrl)});load();
 })();
-</script></body></html>
+</script><script>if(window.lucide)lucide.createIcons();</script></body></html>
