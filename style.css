@@ -61,3 +61,18 @@ input,textarea,select{accent-color:#2563eb}
 @media(max-width:1000px){.navbar{gap:16px}.nav-links{gap:3px}.nav-links a{padding:8px}.tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.navbar{align-items:stretch}.navbar nav,.nav-links{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:3px}.nav-links a{flex:0 0 auto}.nav-actions{justify-content:flex-start}.hero{padding:36px 0}.hero-info{gap:12px}.tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.nav-actions{width:100%}.nav-actions .primary-btn{flex:1}.hero h1{font-size:clamp(2.4rem,12vw,3.1rem)}.hero-buttons>*{width:100%}.tools-grid{grid-template-columns:1fr}.tool-card{min-height:150px;padding:19px}.hero-generator{padding:18px}.generator-header{align-items:flex-start}.section{padding:24px 0}}
+
+/* Shared legacy page shell */
+.site-header{max-width:1200px;margin:0 auto;padding:20px 26px;display:flex;align-items:center;justify-content:space-between;gap:22px;border-bottom:1px solid var(--border)}
+.site-header .logo{font-size:1.15rem;font-weight:850}
+.site-header nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.site-header nav a{padding:8px 11px;border-radius:10px;color:var(--muted);font-size:.9rem}
+.site-header nav a:hover{background:rgba(37,99,235,.13);color:var(--text)}
+.container{max-width:1200px;margin:0 auto;padding:30px 26px 60px}
+.container .hero{display:block;min-height:0;padding:32px 0}
+.container .hero h1{margin:10px 0 14px}
+.container .hero p{color:var(--muted)}
+.container section,.container article{border-color:var(--border)}
+.container input,.container select,.container textarea{background:#071225;color:var(--text);border:1px solid var(--border);border-radius:10px}
+.container button{border:1px solid var(--border);border-radius:10px;background:linear-gradient(110deg,#2563eb,#0891b2);color:#fff;padding:11px 15px;font-weight:700;cursor:pointer}
+@media(max-width:700px){.site-header{align-items:flex-start;flex-direction:column;padding:18px 16px}.site-header nav{width:100%;overflow-x:auto;flex-wrap:nowrap}.site-header nav a{flex:0 0 auto}.container{padding:20px 16px 42px}}
