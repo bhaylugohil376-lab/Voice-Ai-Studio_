@@ -25,7 +25,7 @@
 <label for="ttsText">Text</label><textarea id="ttsText" maxlength="5000" placeholder="Type text to speak..."></textarea>
 <p><small><span id="ttsChars">0</span>/5000 characters</small></p>
 <div class="tts-row"><div><label for="ttsSearch">Search voices</label><input id="ttsSearch" type="search" placeholder="Search by name"></div>
-<div><label for="ttsLanguage">Voice language</label><select id="ttsLanguage"><option value="all">All languages</option><option value="hindi">Hindi</option><option value="english">English</option><option value="bilingual">Hindi + English</option></select></div></div><label for="ttsVoice">Voice</label><select id="ttsVoice"><option value="">Loading voices…</option></select>
+<div><label for="ttsLanguage">Voice language</label><select id="ttsLanguage"><option value="hindi" selected>Hindi</option><option value="all">All languages</option><option value="english">English</option><option value="bilingual">Hindi + English</option></select></div></div><label for="ttsVoice">Voice</label><select id="ttsVoice"><option value="">Loading voices…</option></select>
 <label for="ttsModel">Model</label><select id="ttsModel"><option value="eleven_multilingual_v2">Multilingual v2</option><option value="eleven_flash_v2_5">Flash v2.5</option><option value="eleven_turbo_v2_5">Turbo v2.5</option></select>
 <button class="tts-btn" id="ttsRefresh" type="button">Refresh Voices</button><button class="tts-btn" id="ttsGenerate" type="button">Generate Speech</button>
 <p id="ttsCount">0 voices loaded</p><div id="ttsStatus" role="status" aria-live="polite"></div>
