@@ -1,49 +1,1376 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Voice AI Studio — create, explore, and manage AI voice projects."><title>Voice AI Studio</title><link rel="stylesheet" href="./style.css"></head>
-<body><header class="navbar"><a class="logo" href="./index.html" aria-label="Voice AI Studio home">Voice AI Studio</a><nav aria-label="Main navigation"><a href="./index.html">Home</a><a href="./tools.html">AI Tools</a><a href="./voices.html">Voices</a><a href="./studio.html">Studio</a><a href="./pricing.html">Pricing</a><a href="./login.html">Login</a><a href="./signup.html">Get Started</a></nav></header>
-<main>
-<section class="hero">
-  <div class="hero-content">
-    <p class="eyebrow">YOUR CREATIVE VOICE WORKSPACE</p>
-    <h1>Bring your words to life with <span>Voice AI Studio</span></h1>
-    <p>All 24 tools and workspace sections in one place. Select any card to open its own page.</p>
-    <div class="hero-actions"><a class="button button-primary" href="./studio.html">Open Studio</a><a class="button button-secondary" href="#all-sections">Explore all 24 sections</a></div>
-  </div>
-  <div class="hero-generator"><h2>Start creating</h2><p>Jump directly to a tool or workspace page.</p><div class="tools-grid">
-    <a class="tool-card" href="./tts.html"><h3>Text to Speech</h3><p>Turn written text into spoken audio.</p></a>
-    <a class="tool-card" href="./voice-library.html"><h3>Voice Library</h3><p>Browse available voices.</p></a>
-    <a class="tool-card" href="./stt.html"><h3>Speech to Text</h3><p>Convert speech into text.</p></a>
-    <a class="tool-card" href="./sound-effects.html"><h3>Sound Effects</h3><p>Explore sound effects tools.</p></a>
-  </div></div>
-</section>
-<section class="section" id="all-sections">
-  <h2>All 24 sections</h2><p>Each card opens a separate HTML page.</p>
-  <div class="tools-grid">
-    <a class="tool-card" href="./tts.html"><h3>01. Text-to-Speech (TTS)</h3><p>Generate speech from text.</p></a>
-    <a class="tool-card" href="./voice-library.html"><h3>02. Voice Library</h3><p>Browse and select voices.</p></a>
-    <a class="tool-card" href="./clone.html"><h3>03. Voice Cloning</h3><p>Open voice cloning workspace.</p></a>
-    <a class="tool-card" href="./voice-design.html"><h3>04. Voice Design</h3><p>Explore voice design.</p></a>
-    <a class="tool-card" href="./changer.html"><h3>05. Voice Changer</h3><p>Open voice conversion tools.</p></a>
-    <a class="tool-card" href="./voice-isolator.html"><h3>06. Voice Isolator</h3><p>Separate voice from background audio.</p></a>
-    <a class="tool-card" href="./video-voice-transfer.html"><h3>07. Video Voice Transfer</h3><p>Open video voice transfer.</p></a>
-    <a class="tool-card" href="./dubbing.html"><h3>08. Video Dubbing</h3><p>Open dubbing tools.</p></a>
-    <a class="tool-card" href="./stt.html"><h3>09. Speech-to-Text (STT)</h3><p>Transcribe speech into text.</p></a>
-    <a class="tool-card" href="./captions.html"><h3>10. Captions</h3><p>Open caption tools.</p></a>
-    <a class="tool-card" href="./music.html"><h3>11. Music Generation</h3><p>Open music generation section.</p></a>
-    <a class="tool-card" href="./sound-effects.html"><h3>12. Sound Effects</h3><p>Create audio effects.</p></a>
-    <a class="tool-card" href="./image.html"><h3>13. Image Generation</h3><p>Open image generation section.</p></a>
-    <a class="tool-card" href="./assistant.html"><h3>14. AI Assistant</h3><p>Open the AI assistant.</p></a>
-    <a class="tool-card" href="./dialogue.html"><h3>15. Dialogue</h3><p>Open multi-speaker dialogue tools.</p></a>
-    <a class="tool-card" href="./agents.html"><h3>16. AI Agents</h3><p>Open the AI agents section.</p></a>
-    <a class="tool-card" href="./studio.html"><h3>17. Studio</h3><p>Open your creative workspace.</p></a>
-    <a class="tool-card" href="./projects.html"><h3>18. Projects</h3><p>Manage your projects.</p></a>
-    <a class="tool-card" href="./favorites.html"><h3>19. Favorites</h3><p>Open saved favorites.</p></a>
-    <a class="tool-card" href="./profile.html"><h3>20. Profile</h3><p>View your account profile.</p></a>
-    <a class="tool-card" href="./usage.html"><h3>21. Usage Limits</h3><p>Review usage and limits.</p></a>
-    <a class="tool-card" href="./pricing.html"><h3>22. Subscription &amp; Billing</h3><p>View plans and pricing.</p></a>
-    <a class="tool-card" href="./contact.html"><h3>23. Contact</h3><p>Open contact information.</p></a>
-    <a class="tool-card" href="./login.html"><h3>24. Login &amp; Signup</h3><p>Login or create an account.</p></a>
-  </div>
-</section>
-</main>
-<footer class="footer"><p>© <span id="year"></span> Voice AI Studio</p><nav aria-label="Footer navigation"><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="./pricing.html">Pricing</a></nav></footer><script>document.getElementById('year').textContent=new Date().getFullYear();</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="VoiceAI — Professional AI Voice Studio for text to speech, voice cloning, dubbing, music, agents and creative audio."
+  >
+
+  <title>VoiceAI — AI Voice Studio</title>
+
+  <!-- MAIN CSS -->
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- LUCIDE REAL ICONS -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+  <!-- =====================================================
+       NAVBAR
+  ====================================================== -->
+
+  <header class="navbar">
+
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <i data-lucide="audio-lines"></i>
+      </span>
+
+      <span>VoiceAI</span>
+    </a>
+
+    <nav class="nav-links">
+
+      <a href="index.html" class="active">
+        Home
+      </a>
+
+      <a href="tools.html">
+        AI Tools
+      </a>
+
+      <a href="voices.html">
+        Voices
+      </a>
+
+      <a href="studio.html">
+        Studio
+      </a>
+
+      <a href="pricing.html">
+        Pricing
+      </a>
+
+    </nav>
+
+    <div class="nav-actions">
+
+      <a href="login.html" class="nav-login">
+        Login
+      </a>
+
+      <a href="signup.html" class="primary-btn">
+        Get Started
+        <i data-lucide="arrow-right"></i>
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+       HERO
+  ====================================================== -->
+
+  <main>
+
+    <section class="hero">
+
+      <div class="hero-content">
+
+        <div class="badge">
+          <span class="status-dot"></span>
+          AI VOICE STUDIO
+        </div>
+
+        <h1>
+          Create professional
+          <span>AI voices.</span>
+        </h1>
+
+        <p>
+          Generate natural voiceovers, clone voices, create dialogue,
+          music, sound effects and complete AI audio projects
+          from one professional workspace.
+        </p>
+
+        <div class="hero-buttons">
+
+          <a href="tts.html" class="primary-btn">
+            Start Creating
+            <i data-lucide="arrow-right"></i>
+          </a>
+
+          <a href="tools.html" class="secondary-btn">
+            Explore AI Tools
+            <i data-lucide="grid-3x3"></i>
+          </a>
+
+        </div>
+
+        <div class="hero-info">
+
+          <span>
+            <i data-lucide="check"></i>
+            24 AI sections
+          </span>
+
+          <span>
+            <i data-lucide="database"></i>
+            10K+ voice capacity
+          </span>
+
+          <span>
+            <i data-lucide="zap"></i>
+            5 free uses / section
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- HERO GENERATOR -->
+
+      <div class="hero-generator">
+
+        <div class="generator-header">
+
+          <div>
+            <span class="generator-label">
+              VOICEAI STUDIO
+            </span>
+
+            <h2>
+              AI Voice Generator
+            </h2>
+          </div>
+
+          <span class="ready-status">
+            <span></span>
+            Ready
+          </span>
+
+        </div>
+
+
+        <div class="generator-body">
+
+          <label for="heroText">
+            Enter your script
+          </label>
+
+          <textarea
+            id="heroText"
+            placeholder="Create professional voice content with VoiceAI..."
+          ></textarea>
+
+
+          <div class="generator-row">
+
+            <div class="generator-field">
+
+              <label for="heroVoice">
+                Voice
+              </label>
+
+              <select id="heroVoice">
+
+                <option value="">
+                  Select a voice
+                </option>
+
+                <option value="professional-male">
+                  Professional Male
+                </option>
+
+                <option value="professional-female">
+                  Professional Female
+                </option>
+
+                <option value="narrator">
+                  Narrator
+                </option>
+
+                <option value="advertising">
+                  Advertising
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="primary-btn generator-button"
+            id="heroGenerateBtn"
+          >
+
+            <i data-lucide="play"></i>
+
+            Generate Voice
+
+          </button>
+
+
+          <div class="waveform">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         AI TOOLS
+    ====================================================== -->
+
+    <section class="section tools-section" id="tools">
+
+      <div class="section-heading">
+
+        <div class="section-eyebrow">
+          AI CREATION SUITE
+        </div>
+
+        <h2>
+          Everything you need to create.
+        </h2>
+
+        <p>
+          Professional AI voice, audio, video and creative tools
+          organized into dedicated workspaces.
+        </p>
+
+      </div>
+
+
+      <div class="tools-grid">
+
+
+        <!-- 01 -->
+
+        <a href="tts.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="volume-2"></i>
+          </div>
+
+          <div class="tool-number">
+            01
+          </div>
+
+          <h3>
+            Text to Speech
+          </h3>
+
+          <p>
+            Convert text into natural AI voice.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 02 -->
+
+        <a href="voices.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="library"></i>
+          </div>
+
+          <div class="tool-number">
+            02
+          </div>
+
+          <h3>
+            Voice Library
+          </h3>
+
+          <p>
+            Search and preview professional voices.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 03 -->
+
+        <a href="clone.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="copy"></i>
+          </div>
+
+          <div class="tool-number">
+            03
+          </div>
+
+          <h3>
+            Voice Cloning
+          </h3>
+
+          <p>
+            Create a custom AI voice from audio.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 04 -->
+
+        <a href="voice-design.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="sliders-horizontal"></i>
+          </div>
+
+          <div class="tool-number">
+            04
+          </div>
+
+          <h3>
+            Voice Design
+          </h3>
+
+          <p>
+            Design voice characteristics and style.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 05 -->
+
+        <a href="changer.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="shuffle"></i>
+          </div>
+
+          <div class="tool-number">
+            05
+          </div>
+
+          <h3>
+            Voice Changer
+          </h3>
+
+          <p>
+            Transform one voice into another.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 06 -->
+
+        <a href="dialogue.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="message-square-code"></i>
+          </div>
+
+          <div class="tool-number">
+            06
+          </div>
+
+          <h3>
+            Text to Dialogue
+          </h3>
+
+          <p>
+            Create multi-speaker AI conversations.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 07 -->
+
+        <a href="stt.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="file-text"></i>
+          </div>
+
+          <div class="tool-number">
+            07
+          </div>
+
+          <h3>
+            Speech to Text
+          </h3>
+
+          <p>
+            Convert audio into accurate text.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 08 -->
+
+        <a href="voice-isolator.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="audio-waveform"></i>
+          </div>
+
+          <div class="tool-number">
+            08
+          </div>
+
+          <h3>
+            Voice Isolator
+          </h3>
+
+          <p>
+            Isolate speech from background audio.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 09 -->
+
+        <a href="studio.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="sliders"></i>
+          </div>
+
+          <div class="tool-number">
+            09
+          </div>
+
+          <h3>
+            Studio Editor
+          </h3>
+
+          <p>
+            Build and edit complete audio projects.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 10 -->
+
+        <a href="music.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="music-2"></i>
+          </div>
+
+          <div class="tool-number">
+            10
+          </div>
+
+          <h3>
+            AI Music
+          </h3>
+
+          <p>
+            Generate music for your content.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 11 -->
+
+        <a href="sound-effects.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="sparkles"></i>
+          </div>
+
+          <div class="tool-number">
+            11
+          </div>
+
+          <h3>
+            Sound Effects
+          </h3>
+
+          <p>
+            Create AI sound effects for projects.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 12 -->
+
+        <a href="dubbing.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="globe-2"></i>
+          </div>
+
+          <div class="tool-number">
+            12
+          </div>
+
+          <h3>
+            Dubbing
+          </h3>
+
+          <p>
+            Translate and dub content naturally.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 13 -->
+
+        <a href="captions.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="subtitles"></i>
+          </div>
+
+          <div class="tool-number">
+            13
+          </div>
+
+          <h3>
+            Captions
+          </h3>
+
+          <p>
+            Generate accurate captions automatically.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 14 -->
+
+        <a href="video-voice-transfer.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="video"></i>
+          </div>
+
+          <div class="tool-number">
+            14
+          </div>
+
+          <h3>
+            Video Voice Transfer
+          </h3>
+
+          <p>
+            Transfer AI voices into video content.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 15 -->
+
+        <a href="agents.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="bot"></i>
+          </div>
+
+          <div class="tool-number">
+            15
+          </div>
+
+          <h3>
+            Conversational AI Agents
+          </h3>
+
+          <p>
+            Build intelligent voice agents.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 16 -->
+
+        <a href="assistant.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="brain-circuit"></i>
+          </div>
+
+          <div class="tool-number">
+            16
+          </div>
+
+          <h3>
+            AI Assistant
+          </h3>
+
+          <p>
+            Use AI assistance for your creative workflow.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 17 -->
+
+        <a href="image.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="image"></i>
+          </div>
+
+          <div class="tool-number">
+            17
+          </div>
+
+          <h3>
+            Image Generation
+          </h3>
+
+          <p>
+            Generate creative AI images.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 18 -->
+
+        <a href="projects.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="folder-kanban"></i>
+          </div>
+
+          <div class="tool-number">
+            18
+          </div>
+
+          <h3>
+            Projects
+          </h3>
+
+          <p>
+            Manage your generated content and projects.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 19 -->
+
+        <a href="profile.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="user-round"></i>
+          </div>
+
+          <div class="tool-number">
+            19
+          </div>
+
+          <h3>
+            Profile
+          </h3>
+
+          <p>
+            Manage your account and preferences.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 20 -->
+
+        <a href="pricing.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="crown"></i>
+          </div>
+
+          <div class="tool-number">
+            20
+          </div>
+
+          <h3>
+            Premium
+          </h3>
+
+          <p>
+            Upgrade for unlimited AI usage.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 21 -->
+
+        <a href="login.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="log-in"></i>
+          </div>
+
+          <div class="tool-number">
+            21
+          </div>
+
+          <h3>
+            Login / Signup
+          </h3>
+
+          <p>
+            Securely access your VoiceAI account.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 22 -->
+
+        <a href="usage.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="gauge"></i>
+          </div>
+
+          <div class="tool-number">
+            22
+          </div>
+
+          <h3>
+            Usage & Limits
+          </h3>
+
+          <p>
+            Track your AI usage and limits.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 23 -->
+
+        <a href="favorites.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="heart"></i>
+          </div>
+
+          <div class="tool-number">
+            23
+          </div>
+
+          <h3>
+            Favorites
+          </h3>
+
+          <p>
+            Save and manage your favorite voices.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+
+        <!-- 24 -->
+
+        <a href="about.html" class="tool-card">
+
+          <div class="tool-icon">
+            <i data-lucide="circle-help"></i>
+          </div>
+
+          <div class="tool-number">
+            24
+          </div>
+
+          <h3>
+            About / FAQ / Contact
+          </h3>
+
+          <p>
+            Learn more and contact VoiceAI support.
+          </p>
+
+          <span class="tool-arrow">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         VOICE CLONING FEATURE
+    ====================================================== -->
+
+    <section class="section feature-section">
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          <i data-lucide="mic-vocal"></i>
+        </div>
+
+        <span class="section-eyebrow">
+          VOICE CLONING
+        </span>
+
+        <h2>
+          Your voice.
+          <span>Your AI.</span>
+        </h2>
+
+        <p>
+          Upload a clean voice recording and create a custom
+          AI voice for narration, advertisements, videos,
+          podcasts and creative projects.
+        </p>
+
+        <a href="clone.html" class="secondary-btn">
+          Create Voice
+          <i data-lucide="arrow-right"></i>
+        </a>
+
+      </div>
+
+
+      <div class="feature-card upload-card">
+
+        <div class="upload-box">
+
+          <div class="upload-icon">
+            <i data-lucide="upload-cloud"></i>
+          </div>
+
+          <h3>
+            Upload voice sample
+          </h3>
+
+          <p>
+            MP3, WAV or M4A
+          </p>
+
+          <button type="button" class="secondary-btn">
+            Choose File
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STUDIO PREVIEW
+    ====================================================== -->
+
+    <section class="section">
+
+      <div class="section-heading">
+
+        <div class="section-eyebrow">
+          STUDIO
+        </div>
+
+        <h2>
+          Build complete audio projects.
+        </h2>
+
+        <p>
+          Edit voice, music and sound effects together
+          inside one professional workspace.
+        </p>
+
+      </div>
+
+
+      <div class="studio-preview">
+
+        <div class="studio-sidebar">
+
+          <div class="studio-title">
+            <i data-lucide="layers-3"></i>
+            Project
+          </div>
+
+          <div class="studio-item active">
+            <i data-lucide="mic"></i>
+            Voice
+          </div>
+
+          <div class="studio-item">
+            <i data-lucide="music"></i>
+            Music
+          </div>
+
+          <div class="studio-item">
+            <i data-lucide="sparkles"></i>
+            Effects
+          </div>
+
+        </div>
+
+
+        <div class="studio-editor">
+
+          <div class="editor-top">
+
+            <span>
+              Untitled Project
+            </span>
+
+            <button class="secondary-btn" type="button">
+              <i data-lucide="play"></i>
+              Preview
+            </button>
+
+          </div>
+
+
+          <div class="editor-canvas">
+
+            <div class="audio-track">
+              <span>Voice Track</span>
+            </div>
+
+            <div class="audio-track">
+              <span>Music Track</span>
+            </div>
+
+            <div class="audio-track">
+              <span>Effects</span>
+            </div>
+
+          </div>
+
+
+          <div class="timeline">
+
+            <div class="timeline-line"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         AI AGENTS
+    ====================================================== -->
+
+    <section class="section">
+
+      <div class="agent-card">
+
+        <div class="agent-header">
+
+          <div>
+
+            <div class="section-eyebrow">
+              CONVERSATIONAL AI
+            </div>
+
+            <h2>
+              Build AI voice agents.
+            </h2>
+
+          </div>
+
+          <div class="agent-icon">
+            <i data-lucide="bot"></i>
+          </div>
+
+        </div>
+
+
+        <div class="agent-chat">
+
+          <div class="agent-message">
+            <span>AI</span>
+            Hello! How can I help you today?
+          </div>
+
+          <div class="agent-message user-message">
+            <span>You</span>
+            I want to create a voice agent.
+          </div>
+
+        </div>
+
+
+        <div class="agent-input-row">
+
+          <input
+            type="text"
+            id="agentInput"
+            placeholder="Talk to your AI agent..."
+          >
+
+          <button
+            type="button"
+            class="primary-btn"
+            id="agentSendBtn"
+          >
+            <i data-lucide="send"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PRICING CTA
+    ====================================================== -->
+
+    <section class="section cta-section">
+
+      <div class="cta-card">
+
+        <div class="cta-icon">
+          <i data-lucide="zap"></i>
+        </div>
+
+        <h2>
+          Create more with VoiceAI.
+        </h2>
+
+        <p>
+          Start free with 5 AI uses per section,
+          or upgrade to Premium for unlimited app usage.
+        </p>
+
+        <div class="hero-buttons">
+
+          <a href="signup.html" class="primary-btn">
+            Start Free
+            <i data-lucide="arrow-right"></i>
+          </a>
+
+          <a href="pricing.html" class="secondary-btn">
+            View Premium
+            <i data-lucide="crown"></i>
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+
+  <footer>
+
+    <div class="footer-main">
+
+      <div class="footer-brand">
+
+        <a href="index.html" class="logo">
+
+          <span class="logo-mark">
+            <i data-lucide="audio-lines"></i>
+          </span>
+
+          VoiceAI
+
+        </a>
+
+        <p>
+          Professional AI voice and creative studio.
+        </p>
+
+      </div>
+
+
+      <div class="footer-links">
+
+        <div>
+
+          <h4>
+            Product
+          </h4>
+
+          <a href="tools.html">AI Tools</a>
+          <a href="voices.html">Voices</a>
+          <a href="studio.html">Studio</a>
+          <a href="pricing.html">Pricing</a>
+
+        </div>
+
+
+        <div>
+
+          <h4>
+            Company
+          </h4>
+
+          <a href="about.html">About</a>
+          <a href="faq.html">FAQ</a>
+          <a href="contact.html">Contact</a>
+
+        </div>
+
+
+        <div>
+
+          <h4>
+            Account
+          </h4>
+
+          <a href="login.html">Login</a>
+          <a href="signup.html">Signup</a>
+          <a href="profile.html">Profile</a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+      <span>
+        © 2026 VoiceAI. All rights reserved.
+      </span>
+
+      <span>
+        AI Voice Studio
+      </span>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =====================================================
+       SUPABASE
+  ====================================================== -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="./supabase-config.js"></script>
+
+  <script src="./script.js"></script>
+
+
+  <!-- =====================================================
+       ICON INITIALIZATION + BASIC HOME ACTIONS
+  ====================================================== -->
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+
+      const generateButton =
+        document.getElementById("heroGenerateBtn");
+
+      if (generateButton) {
+        generateButton.addEventListener("click", () => {
+          const text = document.getElementById("heroText")?.value.trim() || "";
+          const voice = document.getElementById("heroVoice")?.value || "";
+          if (!text) {
+            document.getElementById("heroText")?.focus();
+            document.getElementById("heroText")?.setCustomValidity("Please enter your script first.");
+            document.getElementById("heroText")?.reportValidity();
+            return;
+          }
+          document.getElementById("heroText")?.setCustomValidity("");
+          try {
+            sessionStorage.setItem("voiceai_tts_text", text);
+            sessionStorage.setItem("voiceai_tts_voice", voice);
+          } catch (error) {
+            console.warn("Could not save the voice draft for the next page.", error);
+          }
+          window.location.href = "tts.html";
+        });
+      }
+
+      const agentButton = document.getElementById("agentSendBtn");
+      const agentInput = document.getElementById("agentInput");
+      if (agentButton && agentInput) {
+        const sendAgentDraft = () => {
+          const text = agentInput.value.trim();
+          if (!text) {
+            agentInput.focus();
+            return;
+          }
+          try {
+            sessionStorage.setItem("voiceai_agent_draft", text);
+          } catch (error) {
+            console.warn("Could not save the agent draft.", error);
+          }
+          window.location.href = "agents.html";
+        };
+        agentButton.addEventListener("click", sendAgentDraft);
+        agentInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            sendAgentDraft();
+          }
+        });
+      }
+
+      const chooseSampleButton = document.querySelector(".upload-card .upload-box button");
+      if (chooseSampleButton) {
+        chooseSampleButton.addEventListener("click", () => {
+          window.location.href = "clone.html";
+        });
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
