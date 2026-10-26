@@ -10,6 +10,28 @@ export default async function handler(req, res) {
   try {
     const user = await requireAuth(req, res);
     if (!user) return;
+    const source = typeof req.query?.source === "string" ? req.query.source.toLowerCase() : "library";
+    if (source === "ttsai") {
+      const params = new URLSearchParams({ model: typeof req.query?.model === "string" ? req.query.model : "kokoro" });
+      const language = typeof req.query?.language === "string" ? req.query.language : "";
+      if (["hi", "gu", "en"].includes(language)) params.set("language", language);
+      const page = typeof req.query?.page === "string" ? req.query.page : "";
+      const nextToken = typeof req.query?.next_page_token === "string" ? req.query.next_page_token : "";
+      if (/^\\d{1,5}$/.test(page)) params.set("page", page);
+      if (nextToken) params.set("next_page_token", nextToken);
+      const headers = { Accept: "application/json" };
+      const ttsKey = process.env.TTS_AI_API_KEY;
+      if (ttsKey) headers.Authorization = "Bearer " + ttsKey;
+      try {
+        const response = await fetch("https://api.tts.ai/v1/voices/?" + params.toString(), { headers, signal: AbortSignal.timeout(20000) });
+        const data = await response.json();
+        if (!response.ok) return sendError(res, response.status === 429 ? 429 : 502, "Free TTS voice list unavailable. Check provider access.");
+        const list = Array.isArray(data.voices) ? data.voices : [];
+        return res.status(200).json({ success: true, source, voices: list.map(v => ({ voice_id: String(v.id || v.voice_id || ""), name: String(v.name || v.id || "Voice"), category: v.model || "kokoro", description: v.language || "", labels: { language: v.language || "", gender: v.gender || "" }, preview_url: v.preview_url || "", provider: "ttsai", model_id: v.model || "kokoro" })).filter(v => v.voice_id), count: list.length, total_count: data.total_count ?? data.total ?? null, has_more: Boolean(data.has_more), next_page_token: data.next_page_token || null });
+      } catch {
+        return sendError(res, 502, "Could not connect to free TTS voice provider.");
+      }
+    }
     const apiKey = process.env.ELEVENLABS_API_KEY;
     if (!apiKey) return sendError(res, 500, "ELEVENLABS_API_KEY is not configured.");
 
