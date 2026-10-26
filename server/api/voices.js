@@ -23,8 +23,18 @@ export default async function handler(req, res) {
         const response = await fetch("https://api.tts.ai/v1/voices/?" + params.toString(), { headers, signal: AbortSignal.timeout(20000) });
         const data = await response.json();
         if (!response.ok) return sendError(res, response.status === 429 ? 429 : 502, "Free TTS voice list unavailable. Check provider access.");
-        const list = Array.isArray(data.voices) ? data.voices : [];
-        return res.status(200).json({ success: true, source, voices: list.map(v => ({ voice_id: String(v.id || v.voice_id || ""), name: String(v.name || v.id || "Voice"), category: v.model || "kokoro", description: v.language || "", labels: { language: v.language || "", gender: v.gender || "" }, preview_url: v.preview_url || "", provider: "ttsai", model_id: v.model || "kokoro" })).filter(v => v.voice_id), count: list.length, total_count: data.total_count ?? data.total ?? null, has_more: Boolean(data.has_more), next_page_token: data.next_page_token || null });
+        let list = Array.isArray(data.voices) ? data.voices : [];
+        if (!list.length && language) {
+          const fallbackParams = new URLSearchParams({ model: params.get("model") || "kokoro" });
+          const fallback = await fetch("https://api.tts.ai/v1/voices/?" + fallbackParams.toString(), { headers, signal: AbortSignal.timeout(20000) });
+          const fallbackData = await fallback.json().catch(() => ({}));
+          if (fallback.ok && Array.isArray(fallbackData.voices)) {
+            data = fallbackData;
+            list = fallbackData.voices;
+          }
+        }
+        const voices = list.map(v => ({ voice_id: String(v.id || v.voice_id || ""), name: String(v.name || v.id || "Voice"), category: v.model || params.get("model") || "kokoro", description: v.language || "", labels: { language: v.language || "", gender: v.gender || "" }, preview_url: v.preview_url || "", provider: "ttsai", model_id: v.model || params.get("model") || "kokoro" })).filter(v => v.voice_id);
+        return res.status(200).json({ success: true, source, voices, count: voices.length, total_count: data.total_count ?? data.total ?? null, has_more: Boolean(data.has_more), next_page_token: data.next_page_token || null });
       } catch {
         return sendError(res, 502, "Could not connect to free TTS voice provider.");
       }
