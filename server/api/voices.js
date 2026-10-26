@@ -8,8 +8,6 @@ export default async function handler(req, res) {
     return sendError(res, 405, "Method not allowed");
   }
   try {
-    const user = await requireAuth(req, res);
-    if (!user) return;
     const source = typeof req.query?.source === "string" ? req.query.source.toLowerCase() : "library";
     if (source === "ttsai") {
       const params = new URLSearchParams({ model: typeof req.query?.model === "string" ? req.query.model : "kokoro" });
@@ -32,6 +30,8 @@ export default async function handler(req, res) {
         return sendError(res, 502, "Could not connect to free TTS voice provider.");
       }
     }
+    const user = await requireAuth(req, res);
+    if (!user) return;
     const apiKey = process.env.ELEVENLABS_API_KEY;
     if (!apiKey) return sendError(res, 500, "ELEVENLABS_API_KEY is not configured.");
 
