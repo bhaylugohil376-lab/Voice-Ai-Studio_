@@ -20,6 +20,57 @@ export default async function handler(req, res) {
     if (!text) return sendError(res, 400, "Text is required.");
     if (text.length > MAX_TEXT_LENGTH) return sendError(res, 400, `Text must be ${MAX_TEXT_LENGTH} characters or fewer.`);
     if (!voiceId || !/^[a-zA-Z0-9_-]{1,100}$/.test(voiceId)) return sendError(res, 400, "A valid voice_id is required.");
+
+    // Free TTS.ai provider: does not depend on ElevenLabs credentials or credits.
+    if (body.provider === "ttsai") {
+      const freeModels = new Set(["kokoro", "piper", "vits", "melotts"]);
+      const freeModel = typeof body.model_id === "string" && freeModels.has(body.model_id) ? body.model_id : "kokoro";
+      const languageMap = { hindi: "hi", gujarati: "gu", english: "en" };
+      const language = languageMap[body.language] || (typeof body.language === "string" && /^[a-z]{2,3}$/.test(body.language) ? body.language : "");
+      const ttsHeaders = { "Content-Type": "application/json", Accept: "application/json" };
+      if (process.env.TTS_AI_API_KEY) ttsHeaders.Authorization = "Bearer " + process.env.TTS_AI_API_KEY;
+      const usage = await checkAndUseAI(user, "tts");
+      if (!usage.allowed) return sendError(res, usage.status || 503, usage.error || "Unable to verify AI usage.");
+      try {
+        const submit = await fetch("https://api.tts.ai/v1/tts/", {
+          method: "POST",
+          headers: ttsHeaders,
+          body: JSON.stringify({ model: freeModel, text, voice: voiceId, format: "mp3", ...(language ? { language } : {}) }),
+          signal: AbortSignal.timeout(30000)
+        });
+        const job = await submit.json().catch(() => ({}));
+        if (!submit.ok || !job.uuid) {
+          console.error("TTS.ai submit error:", submit.status, JSON.stringify(job).slice(0, 1000));
+          return sendError(res, submit.status === 429 ? 429 : 502, job.error || job.message || "Free TTS provider could not accept this request.");
+        }
+        let result = null;
+        for (let attempt = 0; attempt < 24; attempt++) {
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          const poll = await fetch("https://api.tts.ai/v1/speech/results/?uuid=" + encodeURIComponent(job.uuid), {
+            headers: process.env.TTS_AI_API_KEY ? { Authorization: "Bearer " + process.env.TTS_AI_API_KEY, Accept: "application/json" } : { Accept: "application/json" },
+            signal: AbortSignal.timeout(15000)
+          });
+          result = await poll.json().catch(() => ({}));
+          if (!poll.ok) return sendError(res, 502, result.error || "Could not check free TTS generation status.");
+          if (result.status === "completed" && result.result_url) break;
+          if (result.status === "failed") return sendError(res, 502, result.error || "Free TTS generation failed.");
+          result = null;
+        }
+        if (!result?.result_url) return sendError(res, 504, "Free TTS generation timed out. Please try again.");
+        const audioResponse = await fetch(result.result_url, { signal: AbortSignal.timeout(30000) });
+        if (!audioResponse.ok) return sendError(res, 502, "Could not download generated audio from free TTS provider.");
+        const audioBuffer = Buffer.from(await audioResponse.arrayBuffer());
+        if (!audioBuffer.length) return sendError(res, 502, "Free TTS provider returned empty audio.");
+        res.setHeader("Content-Type", "audio/mpeg");
+        res.setHeader("Content-Length", String(audioBuffer.length));
+        res.setHeader("Cache-Control", "no-store");
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        return res.status(200).send(audioBuffer);
+      } catch (error) {
+        console.error("TTS.ai generation error:", error?.message || error);
+        return sendError(res, 502, "Free TTS service failed. Please try again.");
+      }
+    }
     const allowedModels = new Set(["eleven_multilingual_v2", "eleven_flash_v2_5", "eleven_turbo_v2_5"]);
     if (!allowedModels.has(modelId)) return sendError(res, 400, "Unsupported TTS model.");
     if (!allowedOutputFormats.has(outputFormat)) return sendError(res, 400, "Unsupported audio output format.");
