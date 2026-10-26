@@ -90,7 +90,29 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const details = await response.text();
       console.error("ElevenLabs TTS error:", response.status, details.slice(0, 1000));
-      return sendError(res, response.status === 429 ? 429 : 502, response.status === 429 ? "ElevenLabs quota or rate limit reached." : "Text-to-Speech generation failed.");
+      let providerCode = "";
+      let providerMessage = "";
+      try {
+        const payload = JSON.parse(details);
+        const detail = payload.detail || payload.error || payload.message || {};
+        if (typeof detail === "string") providerMessage = detail;
+        else {
+          providerCode = String(detail.status || detail.code || "");
+          providerMessage = String(detail.message || detail.detail || "");
+        }
+      } catch {
+        providerMessage = details;
+      }
+      const diagnostic = (providerCode + " " + providerMessage).toLowerCase();
+      if (response.status === 429 || /insufficient[_ ]credits|quota_exceeded|credit.*(limit|insufficient)|rate.?limit/.test(diagnostic)) {
+        return sendError(res, 429, /insufficient[_ ]credits|quota_exceeded|credit.*(limit|insufficient)/.test(diagnostic)
+          ? "ElevenLabs credits are insufficient for this request. Switch to Free TTS or check your ElevenLabs plan quota."
+          : "ElevenLabs rate limit reached. Please wait and try again.");
+      }
+      if (response.status === 401 || response.status === 403 || /subscription_required|feature_not_available|plan.*(required|access)|permission_denied/.test(diagnostic)) {
+        return sendError(res, 403, "ElevenLabs API key or plan does not have access to this feature. Check your ElevenLabs account and API key, or switch to Free TTS.");
+      }
+      return sendError(res, 502, "ElevenLabs speech generation failed. Check provider access and try again.");
     }
     const audioBuffer = Buffer.from(await response.arrayBuffer());
     if (!audioBuffer.length) return sendError(res, 502, "The provider returned empty audio.");
