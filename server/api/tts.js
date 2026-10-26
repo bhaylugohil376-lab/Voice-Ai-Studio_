@@ -1,7 +1,7 @@
 import { sendError, requireMethod, parseJsonBody } from "./_lib/response.js";
 
-const MAX_TEXT_LENGTH = 5000;
-const FREE_ANONYMOUS_TEXT_LIMIT = 5000;
+const MAX_TEXT_LENGTH = 2000;
+const FREE_ANONYMOUS_TEXT_LIMIT = 500;
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ["POST"])) return;
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     if (!text) return sendError(res, 400, "Text is required.");
     if (text.length > MAX_TEXT_LENGTH) return sendError(res, 400, `Text must be ${MAX_TEXT_LENGTH} characters or fewer.`);
     if (body.provider === "ttsai" && !process.env.TTS_AI_API_KEY && text.length > FREE_ANONYMOUS_TEXT_LIMIT) {
-      return sendError(res, 400, `Free testing supports up to ${FREE_ANONYMOUS_TEXT_LIMIT} characters per request without an API key.`);
+      return sendError(res, 400, `Anonymous Free TTS supports up to ${FREE_ANONYMOUS_TEXT_LIMIT} characters per request. To generate up to ${MAX_TEXT_LENGTH} characters, configure TTS_AI_API_KEY in the server environment (a free TTS.ai account supports up to 5,000 characters per request).`);
     }
     if (!voiceId || !/^[a-zA-Z0-9_-]{1,100}$/.test(voiceId)) return sendError(res, 400, "A valid voice_id is required.");
 
