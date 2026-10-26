@@ -1,4 +1,3 @@
-import { requireAuth } from "./_lib/auth.js";
 import { getSupabaseAdmin } from "./_lib/supabase.js";
 import { sendError } from "./_lib/response.js";
 
@@ -30,8 +29,6 @@ export default async function handler(req, res) {
         return sendError(res, 502, "Could not connect to free TTS voice provider.");
       }
     }
-    const user = await requireAuth(req, res);
-    if (!user) return;
     const apiKey = process.env.ELEVENLABS_API_KEY;
     if (!apiKey) return sendError(res, 500, "ELEVENLABS_API_KEY is not configured.");
 
