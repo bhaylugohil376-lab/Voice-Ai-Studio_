@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       if (ttsKey) headers.Authorization = "Bearer " + ttsKey;
       try {
         const response = await fetch("https://api.tts.ai/v1/voices/?" + params.toString(), { headers, signal: AbortSignal.timeout(20000) });
-        const data = await response.json();
+        let data = await response.json();
         if (!response.ok) return sendError(res, response.status === 429 ? 429 : 502, "Free TTS voice list unavailable. Check provider access.");
         let list = Array.isArray(data.voices) ? data.voices : [];
         if (!list.length && language) {
