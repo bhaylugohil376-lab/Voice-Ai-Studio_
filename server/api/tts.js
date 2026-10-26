@@ -1,5 +1,3 @@
-import { requireAuth } from "./_lib/auth.js";
-import { checkAndUseAI } from "./_lib/usage.js";
 import { sendError, requireMethod, parseJsonBody } from "./_lib/response.js";
 
 const MAX_TEXT_LENGTH = 5000;
@@ -8,8 +6,6 @@ const FREE_ANONYMOUS_TEXT_LIMIT = 500;
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ["POST"])) return;
   try {
-    const user = await requireAuth(req, res);
-    if (!user) return;
     const body = parseJsonBody(req);
     if (!body || typeof body !== "object") return sendError(res, 400, "Invalid JSON request body.");
 
@@ -80,8 +76,6 @@ export default async function handler(req, res) {
 
     const apiKey = process.env.ELEVENLABS_API_KEY;
     if (!apiKey) return sendError(res, 503, "Text-to-Speech provider is not configured.");
-    const usage = await checkAndUseAI(user, "tts");
-    if (!usage.allowed) return sendError(res, usage.status || 503, usage.error || "Unable to verify AI usage.");
 
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}?output_format=${encodeURIComponent(outputFormat)}`, {
       method: "POST",
