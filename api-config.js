@@ -18,7 +18,8 @@
       "/api/tts": "/voiceai-tts",
       "/api/health": "/voiceai-health",
       "/api/voice-changer": "/voiceai-voice-changer",
-      "/api/voice-isolator": "/voiceai-voice-isolator"
+      "/api/voice-isolator": "/voiceai-voice-isolator",
+      "/api/voice-clone": "/voiceai-clone"
     };
     if (routes[path]) {
       return supabaseFunctions + routes[path] + url.search + url.hash;
