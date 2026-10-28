@@ -1,60 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Voice Cloning | Voice AI Studio</title><link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./supabase-config.js"></script><script src="./api-config.js"></script>
-<style>
-.clone-wrap{max-width:820px;margin:30px auto;padding:20px}.clone-card{border:1px solid #334155;border-radius:16px;padding:22px;margin:18px 0}.clone-card label{display:block;font-weight:600;margin:14px 0 7px}.clone-card input[type=text],.clone-card input[type=file],.clone-card textarea{box-sizing:border-box;width:100%;padding:12px;border:1px solid #94a3b8;border-radius:9px}.clone-card textarea{min-height:90px}.clone-btn{padding:12px 18px;margin:14px 8px 0 0;border-radius:9px;cursor:pointer}.clone-status{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:14px}.clone-note{font-size:.95rem;opacity:.9}.clone-success{padding:12px;border-radius:8px;background:#ecfdf5;color:#065f46;overflow-wrap:anywhere}.clone-error{color:#b91c1c}.clone-check{display:flex!important;align-items:flex-start;gap:10px;font-weight:400!important}.clone-check input{margin-top:5px}.clone-check span{flex:1}@media(max-width:600px){.clone-wrap{padding:12px}.clone-card{padding:16px}}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="refresh" content="0; url=./tts.html">
+<title>Voice Cloning Removed | Voice AI Studio</title>
+<link rel="canonical" href="./tts.html">
+<script>window.location.replace("./tts.html");</script>
 </head>
 <body>
-<header class="navbar"><a href="index.html" class="logo"><span>Voice AI Studio</span></a><nav class="nav-links"><a href="tts.html">Text to Speech</a><a href="voice-library.html">Voice Library</a><a href="studio.html">Studio</a><a href="pricing.html">Pricing</a></nav><div class="nav-actions"><a href="login.html" class="nav-login">Login</a><a href="signup.html" class="primary-btn">Get Started</a></div></header>
-<main class="clone-wrap">
-<p class="eyebrow">VOICE AI STUDIO</p><h1>Voice Cloning</h1><p>Free voice cloning is being prepared. The paid ElevenLabs integration has been removed. The clone engine is not connected yet, so uploads will not be sent to a provider.</p>
-<section class="clone-card">
-<h2>1. Add a voice sample</h2>
-<label for="cloneName">Name for this voice</label><input id="cloneName" type="text" maxlength="80" placeholder="e.g. My Hindi Voice" required>
-<label for="cloneDescription">Description (optional)</label><textarea id="cloneDescription" maxlength="500" placeholder="Describe the voice or language"></textarea>
-<label for="cloneAudio">Reference audio</label><input id="cloneAudio" type="file" accept="audio/*,.mp3,.wav,.m4a,.webm,.ogg" required>
-<p class="clone-note">Use a clean recording with one speaker, little background noise, and clear speech. Supported formats depend on the provider. Maximum upload size: 20 MB.</p>
-<label class="clone-check"><input id="cloneConsent" type="checkbox"><span>I own this voice or have explicit permission from the speaker to create and use a voice clone.</span></label>
-<label class="clone-check"><input id="cloneRights" type="checkbox"><span>I confirm I have the rights to upload this audio and understand provider plan/credit limits may apply.</span></label>
-<button class="clone-btn" id="cloneCreate" type="button">Create Voice Clone</button>
-<p id="cloneStatus" class="clone-status" role="status" aria-live="polite"></p>
-</section>
-<section class="clone-card"><h2>2. Use the cloned voice</h2><p id="cloneNext">After a free cloning engine is connected, the cloned voice will appear here. Voice cloning is currently unavailable; no audio will be uploaded to a paid provider.</p><p id="cloneVoiceId" hidden></p><a class="button" href="tts.html">Open Text to Speech</a></section>
-</main>
-<script>
-(()=>{"use strict";
-const $=id=>document.getElementById(id);let busy=false;
-function status(message,kind=""){const el=$("cloneStatus");el.className="clone-status "+kind;el.textContent=message}
-$("cloneCreate").addEventListener("click",async()=>{
- if(busy)return;
- const name=$("cloneName").value.trim(),file=$("cloneAudio").files?.[0];
- if(!name)return status("Enter a name for this voice.","clone-error");
- if(!file)return status("Select a reference audio file first.","clone-error");
- if(file.size>20*1024*1024)return status("Audio file must be smaller than 20 MB.","clone-error");
- if(!$("cloneConsent").checked||!$("cloneRights").checked)return status("Confirm both voice permission and upload rights before cloning.","clone-error");
- const client=window.supabaseClient;
- if(!client?.auth?.getSession)return status("Supabase authentication did not initialize. Refresh the page and try again.","clone-error");
- busy=true;$("cloneCreate").disabled=true;status("Checking login and uploading audio securely…");
- try{
-  const {data,error}=await client.auth.getSession();if(error)throw error;
-  const token=data?.session?.access_token;if(!token)throw Error("Please log in first. Voice cloning requires an account session.");
-  const form=new FormData();form.append("name",name);form.append("description",$("cloneDescription").value.trim());form.append("audio",file,file.name);form.append("consent","true");form.append("rights_attestation","User confirms ownership or explicit permission to clone this voice.");
-  const response=await fetch("/api/voice-clone",{method:"POST",headers:{Authorization:"Bearer "+token},body:form});
-  let payload={};try{payload=await response.json()}catch{}
-  if(!response.ok||!payload.success)throw Error(payload.error||("Voice cloning failed (HTTP "+response.status+")."));
-  const id=payload.voice_id||payload.voiceId;if(!id)throw Error("Provider did not return a voice ID; clone creation cannot be confirmed.");
-  $("cloneVoiceId").hidden=false;$("cloneVoiceId").textContent="Voice ID: "+id;
-  $("cloneNext").textContent="Clone created. Open Text to Speech and refresh the voice list.";
-  status("Voice clone created successfully. Voice ID: "+id,"clone-success");
-  try{localStorage.setItem("voiceai_last_cloned_voice_id",id);localStorage.setItem("voiceai_last_cloned_voice_name",name)}catch{}
- }catch(e){status(e?.message||"Voice cloning failed. Check login, provider API key, plan eligibility, and server configuration.","clone-error")}
- finally{busy=false;$("cloneCreate").disabled=false}
-});
-})();
-</script>
-</body></html>
+<p>Voice cloning has been removed from Voice AI Studio. Redirecting to <a href="./tts.html">Text to Speech</a>…</p>
+</body>
+</html>
