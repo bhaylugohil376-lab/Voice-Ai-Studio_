@@ -12,7 +12,7 @@
 <body>
 <header class="navbar"><a href="index.html" class="logo"><span>Voice AI Studio</span></a><nav class="nav-links"><a href="tts.html">Text to Speech</a><a href="voice-library.html">Voice Library</a><a href="studio.html">Studio</a><a href="pricing.html">Pricing</a></nav><div class="nav-actions"><a href="login.html" class="nav-login">Login</a><a href="signup.html" class="primary-btn">Get Started</a></div></header>
 <main class="clone-wrap">
-<p class="eyebrow">VOICE AI STUDIO</p><h1>Voice Cloning</h1><p>Create a clone of your own voice or a voice you have explicit permission to use. This uses your connected ElevenLabs account and may require an eligible plan or credits.</p>
+<p class="eyebrow">VOICE AI STUDIO</p><h1>Voice Cloning</h1><p>Free voice cloning is being prepared. The paid ElevenLabs integration has been removed. The clone engine is not connected yet, so uploads will not be sent to a provider.</p>
 <section class="clone-card">
 <h2>1. Add a voice sample</h2>
 <label for="cloneName">Name for this voice</label><input id="cloneName" type="text" maxlength="80" placeholder="e.g. My Hindi Voice" required>
@@ -24,7 +24,7 @@
 <button class="clone-btn" id="cloneCreate" type="button">Create Voice Clone</button>
 <p id="cloneStatus" class="clone-status" role="status" aria-live="polite"></p>
 </section>
-<section class="clone-card"><h2>2. Use the cloned voice</h2><p id="cloneNext">After a successful clone, its voice ID will be shown here. Then open Text to Speech, choose “My ElevenLabs voices”, and refresh the voice list.</p><p id="cloneVoiceId" hidden></p><a class="button" href="tts.html">Open Text to Speech</a></section>
+<section class="clone-card"><h2>2. Use the cloned voice</h2><p id="cloneNext">After a free cloning engine is connected, the cloned voice will appear here. Voice cloning is currently unavailable; no audio will be uploaded to a paid provider.</p><p id="cloneVoiceId" hidden></p><a class="button" href="tts.html">Open Text to Speech</a></section>
 </main>
 <script>
 (()=>{"use strict";
@@ -49,7 +49,7 @@ $("cloneCreate").addEventListener("click",async()=>{
   if(!response.ok||!payload.success)throw Error(payload.error||("Voice cloning failed (HTTP "+response.status+")."));
   const id=payload.voice_id||payload.voiceId;if(!id)throw Error("Provider did not return a voice ID; clone creation cannot be confirmed.");
   $("cloneVoiceId").hidden=false;$("cloneVoiceId").textContent="Voice ID: "+id;
-  $("cloneNext").textContent="Clone created. Open Text to Speech, choose My ElevenLabs voices, then click Refresh Voices. If it is missing, check that the backend key belongs to the same ElevenLabs account.";
+  $("cloneNext").textContent="Clone created. Open Text to Speech and refresh the voice list.";
   status("Voice clone created successfully. Voice ID: "+id,"clone-success");
   try{localStorage.setItem("voiceai_last_cloned_voice_id",id);localStorage.setItem("voiceai_last_cloned_voice_name",name)}catch{}
  }catch(e){status(e?.message||"Voice cloning failed. Check login, provider API key, plan eligibility, and server configuration.","clone-error")}
