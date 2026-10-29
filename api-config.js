@@ -16,6 +16,7 @@
     const routes = {
       "/api/voices": "/voiceai-voices",
       "/api/tts": "/voiceai-tts",
+      "/api/voice-design": "/voiceai-tts",
       "/api/health": "/voiceai-health",
       "/api/voice-changer": "/voiceai-voice-changer",
       "/api/voice-isolator": "/voiceai-voice-isolator",
