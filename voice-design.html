@@ -32,7 +32,8 @@
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
-let selectedPreview=-1;\nconst traits=()=>[...document.querySelectorAll('#vd-traits [aria-pressed="true"]')].map(x=>x.textContent.trim());
+let selectedPreview=-1;
+const traits=()=>[...document.querySelectorAll('#vd-traits [aria-pressed="true"]')].map(x=>x.textContent.trim());
 const speed=v=>({1:'Slow',2:'Relaxed',3:'Natural',4:'Brisk',5:'Fast'}[v]);
 const pitch=v=>({1:'Deep',2:'Low-mid',3:'Balanced',4:'Bright',5:'High'}[v]);
 function build(){const name=$('vd-name').value.trim()||'Untitled Voice';const lang=$('vd-language').value;const gender=$('vd-gender').value;const age=$('vd-age').value;const accent=$('vd-accent').value;const style=traits().join(', ')||'balanced';const delivery=$('vd-delivery').value;const pace=speed($('vd-speed').value);const tone=pitch($('vd-pitch').value);const extra=$('vd-extra').value.trim();const genderSpec=gender==='Male'?'clearly male, masculine-sounding voice with a natural low-to-mid register':gender==='Female'?'clearly female, feminine-sounding voice':'gender-neutral voice';const prompt='Create a professional '+age.toLowerCase()+' '+genderSpec+' in '+lang+' with a '+accent.toLowerCase()+' accent. Delivery style: '+delivery+'. Personality: '+style+'. Speaking pace: '+pace.toLowerCase()+'. Pitch: '+tone.toLowerCase()+'. Use natural human-like phrasing, realistic pauses, clear native pronunciation, and avoid robotic or synthetic-sounding delivery. '+extra;$('vd-preview-name').textContent=name;$('vd-summary').textContent=[style,lang,accent,pace+' pace',tone+' pitch'].join(' · ');$('vd-prompt').value=prompt;return prompt}
