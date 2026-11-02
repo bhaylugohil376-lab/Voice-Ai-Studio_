@@ -47,7 +47,7 @@
       </div>
       <aside class="hero-generator" aria-labelledby="generator-title">
         <div class="generator-header"><div><span class="generator-label">VOICE AI STUDIO</span><h2 id="generator-title">Quick Start to TTS</h2></div><span class="ready-status"><span></span> TTS workspace</span></div>
-        <div class="generator-body"><label for="home-script">Enter your script</label><textarea id="home-script" placeholder="Create professional voice content with AI..."></textarea><div class="generator-row"><div class="generator-field"><label for="home-voice">Voice</label><select id="home-voice" aria-describedby="home-voice-status"><option value="">Loading available voices…</option></select><p id="home-voice-status" class="generator-note" role="status" aria-live="polite">Loading available voices…</p></div></div><button class="button button-primary" id="home-generate" type="button" style="margin-top:16px;width:100%">Continue to Text to Speech <span aria-hidden="true">→</span></button><p class="generator-note">Your script will be carried to the Text to Speech workspace, where you can choose a voice and generate audio.</p></div>
+        <div class="generator-body"><label for="home-script">Enter your script</label><textarea id="home-script" placeholder="Create professional voice content with AI..."></textarea><div class="generator-row"><div class="generator-field"><label for="home-voice">Hindi voice (optional)</label><select id="home-voice" aria-describedby="home-voice-status"><option value="">Loading available voices…</option></select><p id="home-voice-status" class="generator-note" role="status" aria-live="polite">Loading available voices…</p></div></div><button class="button button-primary" id="home-generate" type="button" style="margin-top:16px;width:100%">Continue to Text to Speech <span aria-hidden="true">→</span></button><p class="generator-note">Your script will be carried to the Text to Speech workspace, where you can choose a voice and generate audio.</p></div>
       </aside>
     </section>
     <section class="section container" id="ai-tools"><p class="eyebrow">AI CREATION SUITE</p><h2>Everything you need to create.</h2><p class="section-intro">Professional AI voice, audio, video and creative tools organized into dedicated workspaces.</p><div class="tools-grid" aria-label="All 23 AI tools">
@@ -125,8 +125,13 @@
       });
       const unique = new Map();
       available.forEach((voice) => unique.set((voice.model_id || "") + ":" + voice.voice_id, voice));
-      const voices = [...unique.values()];
-      voiceSelect.replaceChildren(new Option("Select a free voice…", ""));
+      const allVoices = [...unique.values()];
+      const voices = allVoices.filter((voice) => {
+        const language = String(voice.labels?.language || voice.language || voice.labels?.locale || "").toLowerCase();
+        const details = [voice.name, voice.description, voice.category, voice.labels?.accent, voice.labels?.locale, voice.labels?.language].filter(Boolean).join(" ").toLowerCase();
+        return /hindi|hindustani|hi-in|\\bhi\\b/.test(language + " " + details);
+      });
+      voiceSelect.replaceChildren(new Option("Select a Hindi free voice…", ""));
       voices.forEach((voice) => {
         const option = new Option(voice.name + " — " + (voice.model_id || "Free model"), voice.voice_id);
         option.dataset.modelId = voice.model_id || "";
@@ -138,13 +143,13 @@
         setVoiceStatus("No free voices were returned. " + (errors.join(" | ") || "Try Text to Speech > Refresh Voices."));
         return;
       }
-      setVoiceStatus(voices.length + " free-model voices loaded. Choose one or continue to Text to Speech.");
+      setVoiceStatus(voices.length + " Hindi free-model voices loaded. Choose one or continue to Text to Speech.");
       try {
         const saved = JSON.parse(sessionStorage.getItem("voiceai_selected_voice") || "null");
         const savedMatch = saved && voices.find((v) => v.voice_id === saved.voice_id && (!saved.model_id || v.model_id === saved.model_id));
         if (savedMatch) voiceSelect.value = savedMatch.voice_id;
       } catch (_) {}
-      if (errors.length) setVoiceStatus(voices.length + " free-model voices loaded. Some catalogues unavailable: " + errors.join(" | "));
+      if (errors.length) setVoiceStatus(voices.length + " Hindi free-model voices loaded. Some catalogues unavailable: " + errors.join(" | "));
     }
 
     voiceSelect?.addEventListener("change", () => {
