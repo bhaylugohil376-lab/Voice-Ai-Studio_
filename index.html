@@ -100,40 +100,65 @@
 
     async function loadHomeVoices() {
       if (!voiceSelect) return;
-      try {
-        const client = window.supabaseClient;
-        if (!client?.auth?.getSession) throw new Error("Voice service is not initialized. Open Text to Speech to check setup.");
-        const { data, error } = await client.auth.getSession();
-        if (error) throw error;
-        if (!data.session?.access_token) {
-          voiceSelect.replaceChildren(new Option("Sign in to load voices", ""));
-          setVoiceStatus("Sign in first, then open Text to Speech to load available voices.");
-          return;
+      voiceSelect.replaceChildren(new Option("Loading free voices…", ""));
+      setVoiceStatus("Loading public free-model voices. No sign-in required for the catalogue.");
+      const models = ["kokoro", "piper", "vits", "melotts"];
+      const results = await Promise.allSettled(models.map(async (model) => {
+        const url = new URL("/api/voices", window.location.href);
+        url.searchParams.set("source", "ttsai");
+        url.searchParams.set("model", model);
+        const response = await fetch(url.toString());
+        let payload = {};
+        try { payload = await response.json(); } catch (_) {}
+        if (!response.ok || !payload.success || !Array.isArray(payload.voices)) {
+          throw new Error(payload.error || model + " voice catalogue unavailable (" + response.status + ").");
         }
-        voiceSelect.replaceChildren(new Option("Loading available voices…", ""));
-        const response = await fetch("/api/voices", { headers: { Authorization: "Bearer " + data.session.access_token } });
-        let payload;
-        try { payload = await response.json(); } catch (_) { payload = {}; }
-        if (!response.ok) throw new Error(payload.error || payload.message || "Voice service returned HTTP " + response.status + ".");
-        if (!payload.success || !Array.isArray(payload.voices)) throw new Error(payload.error || "The voice service returned an unexpected response.");
-        const available = payload.voices.filter(v => v && v.voice_id && v.name);
-        voiceSelect.replaceChildren(new Option("Select a voice", ""));
-        available.forEach(v => voiceSelect.add(new Option(v.name, v.voice_id)));
-        if (!available.length) {
-          voiceSelect.replaceChildren(new Option("No voices available", ""));
-          setVoiceStatus("No voices were returned. Check provider configuration.");
-        } else {
-          setVoiceStatus(available.length + " available voices loaded.");
-          try {
-            const saved = sessionStorage.getItem("voiceai_tts_voice");
-            if (saved && [...voiceSelect.options].some(option => option.value === saved)) voiceSelect.value = saved;
-          } catch (_) {}
-        }
-      } catch (error) {
-        voiceSelect.replaceChildren(new Option("Voices unavailable — open Text to Speech", ""));
-        setVoiceStatus((error && error.message) || "Could not load voices. Open Text to Speech for details.");
+        return payload.voices
+          .filter((v) => v && v.voice_id && v.name)
+          .map((v) => ({ ...v, provider: v.provider || "ttsai", model_id: v.model_id || v.category || model }));
+      }));
+      const available = [];
+      const errors = [];
+      results.forEach((result, index) => {
+        if (result.status === "fulfilled") available.push(...result.value);
+        else errors.push(models[index] + ": " + (result.reason?.message || "unavailable"));
+      });
+      const unique = new Map();
+      available.forEach((voice) => unique.set((voice.model_id || "") + ":" + voice.voice_id, voice));
+      const voices = [...unique.values()];
+      voiceSelect.replaceChildren(new Option("Select a free voice…", ""));
+      voices.forEach((voice) => {
+        const option = new Option(voice.name + " — " + (voice.model_id || "Free model"), voice.voice_id);
+        option.dataset.modelId = voice.model_id || "";
+        option.dataset.provider = voice.provider || "ttsai";
+        voiceSelect.add(option);
+      });
+      if (!voices.length) {
+        voiceSelect.replaceChildren(new Option("No free voices returned", ""));
+        setVoiceStatus("No free voices were returned. " + (errors.join(" | ") || "Try Text to Speech > Refresh Voices."));
+        return;
       }
+      setVoiceStatus(voices.length + " free-model voices loaded. Choose one or continue to Text to Speech.");
+      try {
+        const saved = JSON.parse(sessionStorage.getItem("voiceai_selected_voice") || "null");
+        const savedMatch = saved && voices.find((v) => v.voice_id === saved.voice_id && (!saved.model_id || v.model_id === saved.model_id));
+        if (savedMatch) voiceSelect.value = savedMatch.voice_id;
+      } catch (_) {}
+      if (errors.length) setVoiceStatus(voices.length + " free-model voices loaded. Some catalogues unavailable: " + errors.join(" | "));
     }
+
+    voiceSelect?.addEventListener("change", () => {
+      const option = voiceSelect.selectedOptions[0];
+      if (!option?.value) return;
+      try {
+        sessionStorage.setItem("voiceai_selected_voice", JSON.stringify({
+          voice_id: option.value,
+          name: option.textContent || "",
+          provider: option.dataset.provider || "ttsai",
+          model_id: option.dataset.modelId || ""
+        }));
+      } catch (_) {}
+    });
 
     generateButton?.addEventListener("click", () => {
       const text = scriptInput?.value.trim() || "";
