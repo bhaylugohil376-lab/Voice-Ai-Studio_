@@ -1,4 +1,4 @@
-/* VoiceAI adapter registry: shared endpoint contract for the 24 product sections.
+/* VoiceAI adapter registry: shared endpoint contract for the 23 active product sections.
  * Provider secrets remain server-side. Adapters never accept or store API keys in the browser.
  * A section is only marked live when its endpoint returns a successful response.
  */
@@ -7,7 +7,6 @@
   const definitions = [
     ["tts","Text to Speech","/api/tts","POST","elevenlabs"],
     ["voice-library","Voice Library","/api/voices","GET","elevenlabs"],
-    ["voice-cloning","Voice Cloning","/api/voice-clone","POST","elevenlabs"],
     ["voice-design","Voice Design","/api/voice-design","POST","elevenlabs"],
     ["voice-changer","Voice Changer","/api/voice-changer","POST","elevenlabs"],
     ["voice-isolator","Voice Isolator","/api/voice-isolator","POST","elevenlabs"],
