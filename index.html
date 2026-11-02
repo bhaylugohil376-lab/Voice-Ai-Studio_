@@ -129,7 +129,7 @@
       const voices = allVoices.filter((voice) => {
         const language = String(voice.labels?.language || voice.language || voice.labels?.locale || "").toLowerCase();
         const details = [voice.name, voice.description, voice.category, voice.labels?.accent, voice.labels?.locale, voice.labels?.language].filter(Boolean).join(" ").toLowerCase();
-        return /hindi|hindustani|hi-in|\\bhi\\b/.test(language + " " + details);
+        return /hindi|hindustani|hi-in|\bhi\b/.test(language + " " + details);
       });
       voiceSelect.replaceChildren(new Option("Select a Hindi free voice…", ""));
       voices.forEach((voice) => {
@@ -139,7 +139,7 @@
         voiceSelect.add(option);
       });
       if (!voices.length) {
-        voiceSelect.replaceChildren(new Option("No free voices returned", ""));
+        voiceSelect.replaceChildren(new Option("No Hindi free voices returned", ""));
         setVoiceStatus("No free voices were returned. " + (errors.join(" | ") || "Try Text to Speech > Refresh Voices."));
         return;
       }
